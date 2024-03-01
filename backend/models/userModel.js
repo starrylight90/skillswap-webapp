@@ -5,14 +5,18 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    phoneNumber: {
-        type: String,
-        required: true
-    },
     email: {
         type: String,
         required: true,
         unique: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    phoneNumber: {
+        type: Number,  // Changed to number
+        required: true
     },
     skills: {
         type: [String],
@@ -20,8 +24,10 @@ const userSchema = new mongoose.Schema({
     },
     photos: {
         type: [{
-            data: Buffer,
-            contentType: String
+            url: {
+                type: String,
+                required: true
+            }
         }],
         validate: {
             validator: function (value) {
@@ -32,8 +38,15 @@ const userSchema = new mongoose.Schema({
     },
     videos: {
         type: [{
-            data: Buffer,
-            contentType: String
+            url: {
+                type: String,
+                required: true
+            },
+            duration: {
+                type: Number,
+                required: true,
+                max: 20
+            }
         }],
         validate: {
             validator: function (value) {
@@ -42,10 +55,33 @@ const userSchema = new mongoose.Schema({
             message: 'Videos should not exceed 2'
         }
     },
-    customSkill: {
+    birthdate: {
+        type: Date,
+        required: true
+    },
+    age: {
+        type: Number,
+        default: 0
+    },
+    gender: {
         type: String,
-        default: ''
+        enum: ['Male', 'Female', 'Other']
+    },
+    description: {
+        type: String,
+        maxlength: 240
     }
+});
+
+// Calculate age before saving
+userSchema.pre('save', function (next) {
+    if (this.birthdate) {
+        const today = new Date();
+        const birthdate = new Date(this.birthdate);
+        const age = today.getFullYear() - birthdate.getFullYear();
+        this.age = age;
+    }
+    next();
 });
 
 const User = mongoose.model('User', userSchema);
