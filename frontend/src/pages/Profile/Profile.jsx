@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import {useDropzone} from 'react-dropzone';
 
 const Page1 = ({ onNext, formData, setFormData }) => {
   const handleNext = () => {
@@ -64,10 +65,16 @@ const Page2 = ({ onPrevious, formData, setFormData }) => {
       console.error('Gender is required');
       return;
     }
-
+  
     // Send the data to the backend
     try {
       const response = await axios.post('http://localhost:3011/api/user', formData);
+  
+      const { token, ...userData } = response.data;
+  
+      // Include the token in the headers for subsequent requests
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  
       console.log('Data submitted successfully:', response.data);
       alert('Data sent successfully');
       navigate('/home');
@@ -76,13 +83,32 @@ const Page2 = ({ onPrevious, formData, setFormData }) => {
       console.error('Error submitting data:', error);
     }
   };
+  const onDrop = async (acceptedFiles) => {
+    try {
+      const formData = new FormData();
+
+      const uniqueIdentifier = `${formData.name}_${new Date().toLocaleDateString()}`;
+
+      acceptedFiles.forEach((file) => {
+        const fileName = `${uniqueIdentifier}_${file.name}`;
+        formData.append('files', file, fileName);
+      });
+
+      const response = await axios.post('http://localhost:3011/api/upload', formData);
+
+      const uploadedPaths = response.data.map((fileName) => `http://localhost:3011/uploads/${fileName}`);
+
+      // Update formData without overwriting existing data
+      setFormData(prevData => ({ ...prevData, photos: [...prevData.photos, ...uploadedPaths.map(url => ({ url }))] }));
+    } catch (error) {
+      console.error('Error uploading files:', error);
+    }
+  };
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   // Hardcoded data for demonstration
   const hardcodedData = {
-    photos: [
-      { "url": "https://example.com/bob_photo1.jpg" },
-      { "url": "https://example.com/bob_photo2.jpg" }
-    ],
     videos: [
       { "url": "https://example.com/bob_video1.mp4", "duration": 15 },
       { "url": "https://example.com/bob_video2.mp4", "duration": 19 }
@@ -145,9 +171,20 @@ const Page2 = ({ onPrevious, formData, setFormData }) => {
 
         {/* Display photos and videos (as hardcoded data) */}
         <label>Photos:</label>
-        {hardcodedData.photos.map((photo, index) => (
-          <div key={index}>{photo.url}</div>
-        ))}
+        <div {...getRootProps()} style={dropzoneStyle}>
+          <input {...getInputProps()} />
+          {isDragActive ? (
+            <p>Drop the files here ...</p>
+          ) : (
+            <p>Drag 'n' drop some files here, or click to select files</p>
+          )}
+        </div>
+        {formData.photos &&
+          formData.photos.map((photo, index) => (
+            <div key={index}>
+              {photo ? <img src={photo} alt={`Uploaded ${index + 1}`} style={imageStyle} /> : null}
+            </div>
+          ))}
         <br />
 
         <label>Videos:</label>
@@ -167,6 +204,25 @@ const Page2 = ({ onPrevious, formData, setFormData }) => {
   );
 };
 
+const dropzoneStyle = {
+  width: '100%',
+  height: '100px',
+  border: '2px dashed #ddd',
+  borderRadius: '4px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  cursor: 'pointer',
+};
+
+const imageStyle = {
+  width: '100px',
+  height: '100px',
+  objectFit: 'cover',
+  marginRight: '10px',
+};
+
+
 const Profile = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -178,7 +234,7 @@ const Profile = () => {
     birthdate: '',
     skills: [],
     description: '',
-    // Example: photos, videos
+    photos: [],
   });
 
   const [currentPage, setCurrentPage] = useState(1);

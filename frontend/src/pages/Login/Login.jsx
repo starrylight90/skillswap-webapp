@@ -4,40 +4,48 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loggedInUser, setLoggedInUser] = useState(null); // State to store user data
+  const navigate = useNavigate();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const navigate = useNavigate();
-  
-    const handleLogin = async () => {
-      // Check if email and password are provided
-      if (!email || !password) {
-        alert('Please enter both email and password.');
-        return;
+  const handleLogin = async () => {
+    if (!email || !password) {
+      alert('Please enter both email and password.');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:3011/api/loginUser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const responseData = await response.json(); // Parse the response as JSON
+
+      // Log the response details
+      console.log('Response Status:', response.status);
+      console.log('Response Headers:', response.headers);
+      console.log('Response Data:', responseData);
+
+      if (response.ok) {
+        // Set the logged-in user data in state
+        setLoggedInUser(responseData);
+        // Successful login, redirect to home page
+        navigate('/home', { state: { loggedInUser: responseData } });
+      } else {
+        // Display an error message
+        alert(`Login failed: ${responseData.error}`);
       }
-  
-      // Assuming you have an API endpoint for login
-      try {
-        const response = await fetch('http://localhost:3011/api/loginUser', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email, password }),
-        });
-  
-        if (response.ok) {
-          // Successful login, redirect to home page
-          navigate('/home');
-        } else {
-          // Display an error message
-          alert('Incorrect Email Id or Password');
-        }
-      } catch (error) {
-        console.error('Error during login:', error);
-        alert('An error occurred during login. Please try again.');
-      }
-    };
+    } catch (error) {
+      console.error('Error during login:', error);
+      alert('An error occurred during login. Please try again.');
+    }
+  };
+    
 
 
   return (

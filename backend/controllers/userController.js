@@ -1,5 +1,6 @@
 // controllers/userController.js
 import User from "../models/userModel.js";
+import { generateToken } from "../utils/jwtUtils.js";
 
 const createUser = async (req, res) => {
   try {
@@ -29,7 +30,12 @@ const createUser = async (req, res) => {
       description,
     });
 
+    // Generate a token for the newly created user
+    const token = generateToken(newUser._id, newUser.email);
+
+    // Include the token in the response
     res.status(201).json({
+      token,
       _id: newUser._id,
       name: newUser.name,
       email: newUser.email,
@@ -78,7 +84,11 @@ const loginUser = async (req, res) => {
   }
 
     // Login successful
+    const token = generateToken(user._id, user.email);
+ 
+
     res.status(200).json({
+      token,
       _id: user._id,
       name: user.name,
       email: user.email,

@@ -24,18 +24,18 @@ const userSchema = new mongoose.Schema({
     },
     photos: {
         type: [{
-            url: {
-                type: String,
-                required: true
-            }
+          url: {
+            type: String,
+            required: true
+          }
         }],
         validate: {
-            validator: function (value) {
-                return value.length <= 3;
-            },
-            message: 'Photos should not exceed 3'
+          validator: function (value) {
+            return value.length <= 3;
+          },
+          message: 'Photos should not exceed 3'
         }
-    },
+      },
     videos: {
         type: [{
             url: {
