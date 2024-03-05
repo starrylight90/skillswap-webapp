@@ -55,6 +55,7 @@ const Page1 = ({ onNext, formData, setFormData }) => {
 
 const Page2 = ({ onPrevious, formData, setFormData }) => {
   const navigate = useNavigate();
+
   const handlePrevious = () => {
     onPrevious();
   };
@@ -70,14 +71,13 @@ const Page2 = ({ onPrevious, formData, setFormData }) => {
     try {
       const response = await axios.post('http://localhost:3011/api/user', formData);
   
-      const { token, ...userData } = response.data;
-  
-      // Include the token in the headers for subsequent requests
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      
   
       console.log('Data submitted successfully:', response.data);
-      alert('Data sent successfully');
-      navigate('/home');
+      alert('Data sent successfully, Account created Successfully!');
+  
+      // Navigate to /home after setting the logged-in user
+      navigate('/login');
       // You can handle further actions here, such as redirecting the user
     } catch (error) {
       console.error('Error submitting data:', error);

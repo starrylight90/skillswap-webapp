@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import withAuthRedirect from '../../components/withAuthRedirect';
+
+
 import Card from './Card';
 
 export const Home = () => {
@@ -8,6 +11,7 @@ export const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const location = useLocation();
   const loggedInUser = location.state?.loggedInUser;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -23,7 +27,8 @@ export const Home = () => {
           const filteredUsers = response.data.filter(user => user._id !== loggedInUser._id);
           setUsers(filteredUsers);
         } else {
-          console.error('Invalid or undefined loggedInUser');
+          console.error('Invalid or undefined loggedInUser');        
+          navigate('/login');
         }
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -31,7 +36,7 @@ export const Home = () => {
     };
 
     fetchUsers();
-  }, [loggedInUser]);
+  }, [loggedInUser, navigate]); // Include 'navigate' in the dependency array
 
   const handleNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % users.length);
@@ -66,3 +71,4 @@ const styles = {
     marginTop: '10px',
   },
 };
+export default withAuthRedirect(Home); // Apply the withAuthRedirect HOC

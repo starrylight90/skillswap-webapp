@@ -1,38 +1,78 @@
 import React from 'react';
 
 const Card = ({ user }) => {
-  const skillsString = user.skills.join(', ');
 
-  // Check if user has photos
   const hasPhotos = user.photos && user.photos.length > 0;
 
-  // Display the uploaded photo or a random image
-  const photoUrl = hasPhotos ? user.photos[0].url : null;
+  // Display the uploaded photos or random images
+  const photoUrls = hasPhotos ? user.photos.map(photo => photo.url) : [];
   const avatarImage = require('../images/img_avatar.png');
-  // Import all images from the "images" folder
   const imagesContext = require.context('../images', false, /\.(png|jpe?g|svg)$/);
   const images = imagesContext.keys().map(imagesContext);
-
-  // Choose a random image from the imported images if MongoDB URL is not available
-  const randomImage = images[Math.floor(Math.random() * images.length)];
-
-  return (
-    <div style={styles.card}>
-      <div style={styles.carousel}>
-        {(hasPhotos || randomImage) && (
-          <img src={hasPhotos ? photoUrl : randomImage} alt={user.name} style={styles.image} />
-        )}
-        <img src={avatarImage} alt="Avatar" style={styles.image} />
-      </div>
-      <div style={styles.container}>
+  const skillsString = user.skills.join(', ');
+  // Scenario 1: MongoDB has one image link
+  if (photoUrls.length === 1) {
+    return (
+      <div style={styles.card}>
+        <div style={styles.carousel}>
+          <img src={photoUrls[0]} alt={user.name} style={styles.image} />
+          <img src={avatarImage} alt="Avatar" style={styles.image} />
+        </div>
+        <div style={styles.container}>
+        <div style={styles.container}>
         <h4 style={styles.title}><b>{user.name}</b></h4>
         <p><b>Age:</b> {user.age}, <b>Gender:</b> {user.gender}</p>
         <p><b>Skills:</b> <span style={styles.skills}>{skillsString}</span></p>
         <p>{user.description}</p>
       </div>
-    </div>
-  );
-};
+        </div>
+      </div>
+    );
+  }
+
+  // Scenario 2: MongoDB has no image link
+  if (photoUrls.length === 0) {
+    const randomImage = images[Math.floor(Math.random() * images.length)];
+    return (
+      <div style={styles.card}>
+        <div style={styles.carousel}>
+          <img src={randomImage} alt={user.name} style={styles.image} />
+          <img src={avatarImage} alt="Avatar" style={styles.image} />
+        </div>
+        <div style={styles.container}>
+        <div style={styles.container}>
+        <h4 style={styles.title}><b>{user.name}</b></h4>
+        <p><b>Age:</b> {user.age}, <b>Gender:</b> {user.gender}</p>
+        <p><b>Skills:</b> <span style={styles.skills}>{skillsString}</span></p>
+        <p>{user.description}</p>
+      </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Scenario 3: MongoDB has two image links
+  if (photoUrls.length === 2) {
+    return (
+      <div style={styles.card}>
+        <div style={styles.carousel}>
+          <img src={photoUrls[0]} alt={user.name} style={styles.image} />
+          <img src={photoUrls[1]} alt={user.name} style={styles.image} />
+        </div>
+        <div style={styles.container}>
+        <div style={styles.container}>
+        <h4 style={styles.title}><b>{user.name}</b></h4>
+        <p><b>Age:</b> {user.age}, <b>Gender:</b> {user.gender}</p>
+        <p><b>Skills:</b> <span style={styles.skills}>{skillsString}</span></p>
+        <p>{user.description}</p>
+      </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+
 
 const styles = {
   card: {
