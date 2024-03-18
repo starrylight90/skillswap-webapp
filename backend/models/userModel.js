@@ -36,24 +36,26 @@ const userSchema = new mongoose.Schema({
           message: 'Photos should not exceed 3'
         }
       },
-    videos: {
-        type: [{
-            url: {
-                type: String,
-                required: true
+      videos: {
+        type: [
+            {
+                url: {
+                    type: String,
+                    required: true,
+                },
+                duration: {
+                    type: Number,
+                    required: true,
+                    max: 25,
+                },
             },
-            duration: {
-                type: Number,
-                required: true,
-                max: 20
-            }
-        }],
+        ],
         validate: {
             validator: function (value) {
                 return value.length <= 2;
             },
-            message: 'Videos should not exceed 2'
-        }
+            message: 'Videos should not exceed 2',
+        },
     },
     birthdate: {
         type: Date,

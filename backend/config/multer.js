@@ -14,14 +14,14 @@ const storage = multer.diskStorage({
   },
 });
 
-// Filter function to allow only jpg or png files
+// Filter function to allow only jpg, png, and mp4 files
 const fileFilter = (req, file, cb) => {
-  const allowedExtensions = ['.jpg', '.jpeg', '.png'];
+  const allowedExtensions = ['.jpg', '.jpeg', '.png', '.mp4'];
   const fileExtension = path.extname(file.originalname).toLowerCase();
   if (allowedExtensions.includes(fileExtension)) {
     cb(null, true); // Accept the file
   } else {
-    cb(new Error('Invalid file type. Only jpg and png are allowed.'), false); // Reject the file
+    cb(new Error('Invalid file type. Only jpg, png, and mp4 are allowed.'), false); // Reject the file
   }
 };
 
