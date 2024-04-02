@@ -72,6 +72,18 @@ const userSchema = new mongoose.Schema({
     description: {
         type: String,
         maxlength: 240
+    },
+    liked: {
+        type: [String], // Array of emails
+        default: []
+    },
+    notLiked: {
+        type: [String], // Array of emails
+        default: []
+    },
+    chat: {
+        type: [String], // Array of emails
+        default: []
     }
 });
 

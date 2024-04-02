@@ -96,10 +96,20 @@ const Page2 = ({ onPrevious, formData, setFormData }) => {
 
       const response = await axios.post('http://localhost:3011/api/upload', formData);
 
-      const uploadedPaths = response.data.map((fileName) => `http://localhost:3011/uploads/${fileName}`);
+      // Separate images and videos based on file type
+      const imagePaths = response.data.filter((path) => path.endsWith('.jpg') || path.endsWith('.jpeg') || path.endsWith('.png'));
+      const videoPaths = response.data.filter((path) => path.endsWith('.mp4'));
+
+      // Prepend base URL to image paths
+      const baseUrl = 'http://localhost:3011/uploads/';
+      const formattedImagePaths = imagePaths.map((path) => baseUrl + path);
 
       // Update formData without overwriting existing data
-      setFormData(prevData => ({ ...prevData, photos: [...prevData.photos, ...uploadedPaths.map(url => ({ url }))] }));
+      setFormData((prevData) => ({
+        ...prevData,
+        photos: [...prevData.photos, ...formattedImagePaths.map((url) => ({ url }))],
+        videos: [...prevData.videos, ...videoPaths.map((url) => ({ url, duration: 0 }))], // Set default duration for videos
+      }));
     } catch (error) {
       console.error('Error uploading files:', error);
     }
@@ -109,11 +119,7 @@ const Page2 = ({ onPrevious, formData, setFormData }) => {
 
   // Hardcoded data for demonstration
   const hardcodedData = {
-    videos: [
-      { "url": "https://example.com/bob_video1.mp4", "duration": 15 },
-      { "url": "https://example.com/bob_video2.mp4", "duration": 19 }
-    ],
-    skills: [
+      skills: [
       "Programming",
       "Data Analysis",
       "Web Development",
@@ -169,8 +175,8 @@ const Page2 = ({ onPrevious, formData, setFormData }) => {
         />
         <br />
 
-        {/* Display photos and videos (as hardcoded data) */}
-        <label>Photos:</label>
+                {/* Display photos and videos */}
+                <label>Photos:</label>
         <div {...getRootProps()} style={dropzoneStyle}>
           <input {...getInputProps()} />
           {isDragActive ? (
@@ -182,15 +188,22 @@ const Page2 = ({ onPrevious, formData, setFormData }) => {
         {formData.photos &&
           formData.photos.map((photo, index) => (
             <div key={index}>
-              {photo ? <img src={photo} alt={`Uploaded ${index + 1}`} style={imageStyle} /> : null}
+              {photo ? <img src={photo.url} alt={`Uploaded ${index + 1}`} style={imageStyle} /> : null}
             </div>
           ))}
         <br />
 
         <label>Videos:</label>
-        {hardcodedData.videos.map((video, index) => (
-          <div key={index}>{video.url}, Duration: {video.duration} seconds</div>
-        ))}
+        {formData.videos &&
+          formData.videos.map((video, index) => (
+            <div key={index}>
+              {video ? (
+                <div>
+                  {video.url}, Duration: {video.duration} seconds
+                </div>
+              ) : null}
+            </div>
+          ))}
         <br />
 
         <button type="button" onClick={handlePrevious}>
@@ -235,6 +248,7 @@ const Profile = () => {
     skills: [],
     description: '',
     photos: [],
+    videos: [],
   });
 
   const [currentPage, setCurrentPage] = useState(1);

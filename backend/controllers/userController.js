@@ -65,6 +65,20 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+const getUserById = async (req, res) => {
+  try {
+    const userId = req.params.uid;
+    const user = await User.findById(userId, { _id: 1, email: 1, skills: 1 });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -107,6 +121,76 @@ const loginUser = async (req, res) => {
   }
 };
 
-// Add other controller functions (getUserById, updateUser) if needed
+const swipeRight = async (req, res) => {
+  try {
+    const currentUserId = req.user.userId;
+    const swipedUserId = req.params.uid;
 
-export { createUser, getAllUsers, loginUser };
+    // Find current user and swiped user
+    const currentUser = await User.findById(currentUserId);
+    const swipedUser = await User.findById(swipedUserId);
+
+    if (!currentUser || !swipedUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Check if the current user has swiped right on the swiped user
+    if (currentUser.liked.includes(swipedUser.email)) {
+      // If already swiped right, update both users' chat fields
+      swipedUser.liked.push(currentUser.email);
+      currentUser.chat.push(swipedUser.email);
+      swipedUser.chat.push(currentUser.email);
+
+      // Save changes to both users
+      await currentUser.save();
+      await swipedUser.save();
+
+      // Check if chat is initiated between the users
+      const chatInitiated = currentUser.chat.includes(swipedUser.email) && swipedUser.chat.includes(currentUser.email);
+
+      res.status(200).json({ message: 'Swiped right successfully, chat initiated', chatInitiated });
+
+    } else {
+      // If not swiped right yet, update the swiped user's liked field
+      swipedUser.liked.push(currentUser.email);
+
+      // Save changes to the swiped user only
+      await swipedUser.save();
+      res.status(200).json({ message: 'Swiped right successfully' });
+    }
+
+    
+  } catch (error) {
+    console.error('Error swiping right:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+const swipeLeft = async (req, res) => {
+  try {
+    const currentUserId = req.user.userId;
+    const swipedUserId = req.params.uid;
+
+    // Find current user and swiped user
+    const currentUser = await User.findById(currentUserId);
+    const swipedUser = await User.findById(swipedUserId);
+
+    if (!currentUser || !swipedUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Update the swiped user's notLiked array with the current user's email
+    swipedUser.notLiked.push(currentUser.email);
+
+    // Save changes to the swiped user
+    await swipedUser.save();
+
+    res.status(200).json({ message: 'Swiped left successfully' });
+  } catch (error) {
+    console.error('Error swiping left:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+export { createUser, getAllUsers, loginUser, getUserById, swipeRight, swipeLeft };

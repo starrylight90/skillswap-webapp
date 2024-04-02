@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import withAuthRedirect from '../../components/withAuthRedirect';
-
-
 import Card from './Card';
 
 export const Home = () => {
@@ -16,18 +14,16 @@ export const Home = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        // Check if loggedInUser is defined and has the expected properties
         if (loggedInUser && loggedInUser._id) {
           const response = await axios.get('http://localhost:3011/api/getAllUsers', {
             headers: {
               'Authorization': `Bearer ${loggedInUser.token}`,
             },
           });
-          // Filter out the logged-in user from the list
           const filteredUsers = response.data.filter(user => user._id !== loggedInUser._id);
           setUsers(filteredUsers);
         } else {
-          console.error('Invalid or undefined loggedInUser');        
+          console.error('Invalid or undefined loggedInUser');
           navigate('/login');
         }
       } catch (error) {
@@ -36,31 +32,101 @@ export const Home = () => {
     };
 
     fetchUsers();
-  }, [loggedInUser, navigate]); // Include 'navigate' in the dependency array
+  }, [loggedInUser, navigate]);
 
-  const handleNext = () => {
+  useEffect(() => {
+    const fetchActiveUserData = async () => {
+      try {
+        if (users.length > 0) {
+          const activeUserId = users[currentIndex]._id;
+          const response = await axios.get(`http://localhost:3011/api/getAllUsers/${activeUserId}`, {
+            headers: {
+              'Authorization': `Bearer ${loggedInUser.token}`,
+            },
+          });
+          console.log('Active User Data:', response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching active user data:', error);
+      }
+    };
+
+    fetchActiveUserData();
+  }, [currentIndex, loggedInUser, users]);
+
+  const handleNext = async () => {
+    try {
+      // Get the swiped user's ID
+      const swipedUserId = users[currentIndex]._id;
+
+      // Send a request to the backend to swipe right
+      const response = await axios.post(
+        `http://localhost:3011/api/swipeRight/${swipedUserId}`,
+        {},
+        {
+          headers: {
+            'Authorization': `Bearer ${loggedInUser.token}`,
+          },
+        }
+      );
+        // Check if the chat has been initiated between the users
+      if (response.data && response.data.chatInitiated) {
+        // Redirect to the chat page
+        navigate('/chat');
+      }
+      else {
+        // Move to the next user
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % users.length);
+      }
+    } catch (error) {
+      console.error('Error swiping right:', error);
+    }
+  };
+
+  const handlePrevious = async () => {
+    try {
+      // Get the swiped user's ID
+      const swipedUserId = users[currentIndex]._id;
+  
+      // Send a request to the backend to swipe left
+      await axios.post(
+        `http://localhost:3011/api/swipeLeft/${swipedUserId}`,
+        {},
+        {
+          headers: {
+            'Authorization': `Bearer ${loggedInUser.token}`,
+          },
+        }
+      );
+  
+      // Move to the previous user
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % users.length);
+    } catch (error) {
+      console.error('Error swiping left:', error);
+    }
+  };
+
+  const handleRight = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % users.length);
   };
 
-  const handlePrevious = () => {
+  const handleLeft = () => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + users.length) % users.length);
   };
+ 
 
-  const handleHeartClick = () => {
-    console.log("Heart clicked");
-  };
-
-  return (
+  return (  
     <div>
       {users.length > 0 && (
         <Card key={users[currentIndex]._id} user={users[currentIndex]} />
       )}
       <div style={styles.buttonContainer}>
-        <button onClick={handlePrevious}>Previous</button>
-        <button onClick={handleHeartClick}>❤️</button>
-        <button onClick={handleNext}>Next</button>
+        <button onClick={handlePrevious} style={styles.button}>Left Swipe</button>
+        <button onClick={handleLeft} style={styles.button}>Previous</button>
+        <button onClick={handleRight} style={styles.button}>Next</button>
+        <button onClick={handleNext} style={styles.button}>Right Swipe</button>
       </div>
-    </div>
+      </div>
   );
 };
 
@@ -70,5 +136,9 @@ const styles = {
     justifyContent: 'center',
     marginTop: '10px',
   },
+  button: {
+    margin: '5px 5px', // Add margin to create space between buttons
+  }
 };
-export default withAuthRedirect(Home); // Apply the withAuthRedirect HOC
+
+export default withAuthRedirect(Home);
