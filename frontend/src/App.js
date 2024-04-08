@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Chat from './pages/Chat/Chat';
 import Footer from './Footer'; // Import Footer component from its file
 import MyNavbar from './MyNavbar'; // Import MyNavbar component from its file
-import AboutUs from './pages/AboutUs/AboutUs';
+import AboutUs from './pages/AboutUsPage/AboutUs';
 
 const App = () => {
   return (
