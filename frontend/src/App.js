@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Chat from './pages/Chat/Chat';
 import Footer from './Footer'; // Import Footer component from its file
 import MyNavbar from './MyNavbar'; // Import MyNavbar component from its file
+import AboutUs from './pages/AboutUs/AboutUs';
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/home" element={<Home />} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/AboutUs" element={<AboutUs />} />
         </Routes>
         <Footer />
       </div>
