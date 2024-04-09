@@ -6,7 +6,7 @@ dotenv.config(); // Load environment variables from .env file
 
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect('mongodb://localhost:27017/skillswap', {
+    const conn = await mongoose.connect(process.env.MONGO_URI, {
       // Remove the useNewUrlParser and useUnifiedTopology options
       // as they are no longer needed
     });
