@@ -3,24 +3,29 @@ import mongoose from 'mongoose';
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        trim : true
     },
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        trim : true
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     phoneNumber: {
         type: Number,  // Changed to number
-        required: true
+        required: true,
+        trim : true
     },
     skills: {
         type: [String],
-        required: true
+        required: true,
+        trim : true
     },
     photos: {
         type: [{
