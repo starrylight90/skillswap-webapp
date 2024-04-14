@@ -20,22 +20,6 @@ const AboutUs = () => {
                 <p>Since then, we've grown into a thriving community of [number] members, exchanging knowledge and skills across a wide range of disciplines.</p>
             </section>
 
-            <section className="team-section">
-                <h2>Our Team</h2>
-                <div className="team-members">
-                    <div className="team-member">
-                        <img src="team-member-1.jpg" alt="Team Member 1" />
-                        <h3>John Doe</h3>
-                        <p>Co-Founder & CEO</p>
-                    </div>
-                    <div className="team-member">
-                        <img src="team-member-2.jpg" alt="Team Member 2" />
-                        <h3>Jane Smith</h3>
-                        <p>Co-Founder & CTO</p>
-                    </div>
-                    {/* Add more team members as needed */}
-                </div>
-            </section>
 
             <section className="why-us-section">
                 <h2>Why SkillSwap?</h2>
