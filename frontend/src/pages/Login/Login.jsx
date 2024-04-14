@@ -2,13 +2,15 @@ import React from 'react'
 import "./Login.css";
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useLoggedInUser } from '../../components/context';
+
 
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loggedInUser, setLoggedInUser] = useState(null); // State to store user data
   const navigate = useNavigate();
+  const { updateLoggedInUser } = useLoggedInUser(); 
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -33,10 +35,15 @@ const Login = () => {
       console.log('Response Data:', responseData);
 
       if (response.ok) {
-        // Set the logged-in user data in state
-        setLoggedInUser(responseData);
-        // Successful login, redirect to home page
-        navigate('/home', { state: { loggedInUser: responseData } });
+        // // Set the logged-in user data in state
+        // updateLoggedInUser(responseData);
+        // // Successful login, redirect to home page
+        // navigate('/chat', { state: { loggedInUser: responseData } });
+
+        // Update logged-in user in context
+        updateLoggedInUser(responseData);
+        // Redirect to chat page
+        navigate('/home');
       } else {
         // Display an error message
         alert(`Login failed: ${responseData.error}`);

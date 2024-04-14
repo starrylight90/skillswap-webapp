@@ -3,12 +3,17 @@ import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import withAuthRedirect from '../../components/withAuthRedirect';
 import Card from './Card';
+import { useLoggedInUser } from '../../components/context'; // Import the context hook
+
+
 
 export const Home = () => {
   const [users, setUsers] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const location = useLocation();
-  const loggedInUser = location.state?.loggedInUser;
+  // const location = useLocation();
+  // const loggedInUser = location.state?.loggedInUser;
+  const { loggedInUser } = useLoggedInUser(); // Destructure loggedInUser from context
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,6 +26,7 @@ export const Home = () => {
             },
           });
           const filteredUsers = response.data.filter(user => user._id !== loggedInUser._id);
+          console.log(loggedInUser);
           setUsers(filteredUsers);
         } else {
           console.error('Invalid or undefined loggedInUser');
@@ -71,8 +77,8 @@ export const Home = () => {
       );
         // Check if the chat has been initiated between the users
       if (response.data && response.data.chatInitiated) {
-        // Redirect to the chat page
-        navigate('/chat');
+        // Redirect to the chat page with necessary data including the token
+        navigate('/chat',{ state: { loggedInUser } });
       }
       else {
         // Move to the next user
