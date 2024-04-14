@@ -10,6 +10,7 @@ const createUser = async (req, res) => {
       password,
       phoneNumber,
       skills,
+      linkedin,
       photos,
       videos,
       birthdate,
@@ -23,6 +24,7 @@ const createUser = async (req, res) => {
       password,
       phoneNumber,
       skills,
+      linkedin,
       photos,
       videos,
       birthdate,
@@ -41,6 +43,7 @@ const createUser = async (req, res) => {
       email: newUser.email,
       phoneNumber: newUser.phoneNumber,
       skills: newUser.skills,
+      linkedin: newUser.linkedin,
       photos: newUser.photos,
       videos: newUser.videos,
       birthdate: newUser.birthdate,
@@ -94,8 +97,8 @@ const getUsersInChat = async (req, res) => {
     const emailsInChat = currentUser.chat;
 
     // Find users with matching emails
-    const usersInChat = await User.find({ email: { $in: emailsInChat } }, '_id name');
-
+    const usersInChat = await User.find({ email: { $in: emailsInChat } }, '_id name linkedin');
+    
     // Return names and UIDs of users in chat
     res.status(200).json(usersInChat);
   } catch (error) {
@@ -133,6 +136,7 @@ const loginUser = async (req, res) => {
       email: user.email,
       phoneNumber: user.phoneNumber,
       skills: user.skills,
+      linkedin: user.linkedin,
       photos: user.photos,
       videos: user.videos,
       birthdate: user.birthdate,

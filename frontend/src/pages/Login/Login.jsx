@@ -38,7 +38,7 @@ const Login = () => {
         // // Set the logged-in user data in state
         // updateLoggedInUser(responseData);
         // // Successful login, redirect to home page
-        // navigate('/chat', { state: { loggedInUser: responseData } });
+        // navigate('/match', { state: { loggedInUser: responseData } });
 
         // Update logged-in user in context
         updateLoggedInUser(responseData);

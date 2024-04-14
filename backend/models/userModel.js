@@ -27,6 +27,11 @@ const userSchema = new mongoose.Schema({
         required: true,
         trim : true
     },
+    linkedin: {
+        type: String,
+        required: true,
+        trim: true
+    },
     photos: {
         type: [{
           url: {

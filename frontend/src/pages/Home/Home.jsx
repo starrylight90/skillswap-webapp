@@ -78,7 +78,7 @@ export const Home = () => {
         // Check if the chat has been initiated between the users
       if (response.data && response.data.chatInitiated) {
         // Redirect to the chat page with necessary data including the token
-        navigate('/chat',{ state: { loggedInUser } });
+        navigate('/match',{ state: { loggedInUser } });
       }
       else {
         // Move to the next user

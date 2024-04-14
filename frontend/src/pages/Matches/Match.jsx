@@ -1,9 +1,9 @@
-// Chat.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useLoggedInUser } from '../../components/context'; // Import the context hook
+import withAuthRedirect from '../../components/withAuthRedirect';
 
-const Chat = () => {
+const Match = () => {
   const { loggedInUser } = useLoggedInUser(); // Destructure loggedInUser from context
   const [chattedUsers, setChattedUsers] = useState([]);
 
@@ -29,15 +29,23 @@ const Chat = () => {
   }, [loggedInUser]);
 
   return (
-    <div className="chat-page">
+    <div className="match-page">
       <h2>People to Chat With</h2>
       <ul>
         {chattedUsers.map((user) => (
-          <li key={user._id}>{user.name}</li>
+          <li key={user._id}>
+            {user.name}
+            {user.linkedin && (
+              <span>
+                &nbsp;|&nbsp;
+                <a href={user.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+              </span>
+            )}
+          </li>
         ))}
       </ul>
     </div>
   );
 };
 
-export default Chat;
+export default withAuthRedirect(Match);
