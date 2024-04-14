@@ -168,6 +168,14 @@ const Page2 = ({ onPrevious, formData, setFormData }) => {
         </select>
         <br />
 
+        <label>Linkedin:</label>
+        <input
+          type="text"
+          value={formData.linkedin}
+          onChange={(e) => setFormData({ ...formData, linkedin: e.target.value })}
+        />
+        <br />
+
         <label>Description:</label>
         <textarea
           value={formData.description}
@@ -246,6 +254,7 @@ const Profile = () => {
     gender: 'Male',
     birthdate: '',
     skills: [],
+    linkedin: '',
     description: '',
     photos: [],
     videos: [],

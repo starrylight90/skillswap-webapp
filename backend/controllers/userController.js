@@ -10,6 +10,7 @@ const createUser = async (req, res) => {
       password,
       phoneNumber,
       skills,
+      linkedin,
       photos,
       videos,
       birthdate,
@@ -23,6 +24,7 @@ const createUser = async (req, res) => {
       password,
       phoneNumber,
       skills,
+      linkedin,
       photos,
       videos,
       birthdate,
@@ -41,6 +43,7 @@ const createUser = async (req, res) => {
       email: newUser.email,
       phoneNumber: newUser.phoneNumber,
       skills: newUser.skills,
+      linkedin: newUser.linkedin,
       photos: newUser.photos,
       videos: newUser.videos,
       birthdate: newUser.birthdate,
@@ -79,6 +82,31 @@ const getUserById = async (req, res) => {
   }
 };
 
+const getUsersInChat = async (req, res) => {
+  try {
+    const currentUserId = req.params.uid;
+
+    // Find the current user
+    const currentUser = await User.findById(currentUserId);
+
+    if (!currentUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Extract emails from the chat field
+    const emailsInChat = currentUser.chat;
+
+    // Find users with matching emails
+    const usersInChat = await User.find({ email: { $in: emailsInChat } }, '_id name linkedin');
+    
+    // Return names and UIDs of users in chat
+    res.status(200).json(usersInChat);
+  } catch (error) {
+    console.error('Error fetching users in chat:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -108,6 +136,7 @@ const loginUser = async (req, res) => {
       email: user.email,
       phoneNumber: user.phoneNumber,
       skills: user.skills,
+      linkedin: user.linkedin,
       photos: user.photos,
       videos: user.videos,
       birthdate: user.birthdate,
@@ -193,4 +222,4 @@ const swipeLeft = async (req, res) => {
   }
 };
 
-export { createUser, getAllUsers, loginUser, getUserById, swipeRight, swipeLeft };
+export { createUser, getAllUsers, loginUser, getUserById, getUsersInChat, swipeRight, swipeLeft };
