@@ -69,6 +69,7 @@ const Page1 = ({ onNext, formData, setFormData }) => {
 };
 
 
+
 const Page2 = ({ onPrevious, formData, setFormData }) => {
   const navigate = useNavigate();
 
@@ -97,12 +98,25 @@ const Page2 = ({ onPrevious, formData, setFormData }) => {
       console.error('Error submitting data:', error);
     }
   };
-
+  
   const onDrop = async (acceptedFiles) => {
-    // Handle file upload logic
+    try {
+      const formData = new FormData();
+      acceptedFiles.forEach((file) => {
+        formData.append('files', file);
+      });
+      // Update formData state to display uploaded photos
+      setFormData((prevData) => ({
+        ...prevData,
+        photos: [...prevData.photos, ...acceptedFiles.map((file) => ({ url: URL.createObjectURL(file) }))],
+      }));
+    } catch (error) {
+      console.error('Error uploading files:', error);
+    }
   };
 
-  // Hardcoded data for demonstration
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
   const hardcodedData = {
     skills: [
       'Programming',
@@ -183,6 +197,23 @@ const Page2 = ({ onPrevious, formData, setFormData }) => {
               ></textarea>
             </div>
             <div className="form-group">
+              <label>Photos:</label>
+              <div {...getRootProps()} style={dropzoneStyle}>
+                <input {...getInputProps()} />
+                {isDragActive ? (
+                  <p>Drop the files here ...</p>
+                ) : (
+                  <p>Drag 'n' drop some files here, or click to select files</p>
+                )}
+              </div>
+              {formData.photos &&
+                formData.photos.map((photo, index) => (
+                  <div key={index}>
+                    {photo ? <img src={photo.url} alt={`Uploaded ${index + 1}`} style={imageStyle} /> : null}
+                  </div>
+                ))}
+            </div>
+            <div className="form-group">
               <button type="button" className="btn btn-primary" onClick={handlePrevious}>
                 Previous
               </button>
@@ -196,6 +227,7 @@ const Page2 = ({ onPrevious, formData, setFormData }) => {
     </div>
   );
 };
+            
 
 const Profile = () => {
   const [formData, setFormData] = useState({
@@ -234,4 +266,22 @@ const Profile = () => {
   );
 };
 
-export default Profile; 
+export default Profile;
+
+const dropzoneStyle = {
+  width: '100%',
+  height: '100px',
+  border: '2px dashed #ddd',
+  borderRadius: '4px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  cursor: 'pointer',
+};
+
+const imageStyle = {
+  width: '100px',
+  height: '100px',
+  objectFit: 'cover',
+  marginRight: '10px',
+};

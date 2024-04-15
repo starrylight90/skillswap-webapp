@@ -18,6 +18,7 @@ body {
   height: 100vh;
 }
 
+
 .card {
   width: 90%; /* Increase card size */
   max-width: 800px; /* Maximum card width */
