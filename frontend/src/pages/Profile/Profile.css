@@ -1,0 +1,67 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.card {
+  width: 80%;
+  max-width: 600px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+.card-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #0077b6;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .form-control {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+  
+  .btn {
+    display: inline-block;
+    font-weight: 400;
+    color: #fff;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: #007bff;
+    border: 1px solid #007bff;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+  
+  .btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+  }
