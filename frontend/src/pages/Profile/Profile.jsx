@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import './Profile.css';
+import graphicImage from '../images/graphic1.jpg';
+import graphicImage2 from '../images/graphic2.jpg';
 
 const Page1 = ({ onNext, formData, setFormData }) => {
   const handleNext = () => {
@@ -12,8 +14,11 @@ const Page1 = ({ onNext, formData, setFormData }) => {
   return (
     <div className="container">
       <div className="card">
+        <h2 className="card-title">SignUp With Us !</h2>
         <div className="card-body">
-          <h2 className="card-title">Page 1</h2>
+          <div className="card-image">
+            <img src={graphicImage} alt="Graphic" />
+          </div>
           <form>
             <div className="form-group">
               <label>Name:</label>
@@ -62,6 +67,7 @@ const Page1 = ({ onNext, formData, setFormData }) => {
     </div>
   );
 };
+
 
 const Page2 = ({ onPrevious, formData, setFormData }) => {
   const navigate = useNavigate();
@@ -115,8 +121,11 @@ const Page2 = ({ onPrevious, formData, setFormData }) => {
   return (
     <div className="container">
       <div className="card">
+        <h2 className="card-title">Tell Us More About You</h2>
         <div className="card-body">
-          <h2 className="card-title">Edit Profile</h2>
+          <div className="card-image">
+            <img src={graphicImage2} alt="Graphic" />
+          </div>
           <form>
             <div className="form-group">
               <label>Gender:</label>
