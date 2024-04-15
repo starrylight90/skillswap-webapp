@@ -5,7 +5,26 @@ import "./Navbar.css";
 const STYLES = ["btn--primary", "btn--outline"];
 const SIZES = ["btn--medium", "btn--large"];
 
-const MyNavbar = () => {
+const Button = ({ children, type, onClick, buttonStyle, buttonSize }) => {
+  const checkButtonStyle = STYLES.includes(buttonStyle)
+    ? buttonStyle
+    : STYLES[0];
+  const checkButtonSize = SIZES.includes(buttonSize) ? buttonSize : SIZES[0];
+
+  return (
+    <Link to="/about-us" className="btn-mobile">
+      <button
+        className={`btn ${checkButtonStyle} ${checkButtonSize}`}
+        onClick={onClick}
+        type={type}
+      >
+        {children}
+      </button>
+    </Link>
+  );
+};
+
+function MyNavbar() {
   const [button, setButton] = useState(true);
 
   const showButton = () => {
@@ -14,7 +33,9 @@ const MyNavbar = () => {
     } else setButton(true);
   };
 
-  window.addEventListener("resize", showButton);
+  window.addEventListener("resize", () => {
+    showButton();
+  });
 
   const [click, setClick] = useState(false);
   const handleClick = () => setClick(!click);
@@ -32,13 +53,9 @@ const MyNavbar = () => {
             <i className={click ? "fas fa-times" : "fas fa-bars"} />
           </div>
           <ul className={click ? "nav-menu active" : "nav-menu"}>
-            {/* Add your menu items here */}
+           
           </ul>
-          {button && (
-            <Link to="/about-us" className="btn-mobile">
-              <button className="btn btn--outline btn--medium">ABOUT US</button>
-            </Link>
-          )}
+          {button && <Button buttonStyle="btn--outline">ABOUT US</Button>}
         </div>
       </nav>
     </>
@@ -46,5 +63,4 @@ const MyNavbar = () => {
 }
 
 export default MyNavbar;
-
 

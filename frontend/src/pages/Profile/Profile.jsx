@@ -5,6 +5,7 @@ import { useDropzone } from 'react-dropzone';
 import './Profile.css';
 import graphicImage from '../images/graphic1.jpg';
 import graphicImage2 from '../images/graphic2.jpg';
+import { Navbar } from 'react-bootstrap';
 
 const Page1 = ({ onNext, formData, setFormData }) => {
   const handleNext = () => {
@@ -12,7 +13,9 @@ const Page1 = ({ onNext, formData, setFormData }) => {
   };
 
   return (
+   
     <div className="container">
+       <Navbar />
       <div className="card">
         <h2 className="card-title">SignUp With Us !</h2>
         <div className="card-body">

@@ -2,6 +2,7 @@ import React from 'react';
 import { useLoggedInUser } from '../../components/context'; // Import the context hook
 import "./userProfile.css";
 
+
 const UserProfile = () => {
   const { loggedInUser } = useLoggedInUser(); // Destructure loggedInUser from context
 
