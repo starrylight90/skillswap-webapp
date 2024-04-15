@@ -4,6 +4,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import withAuthRedirect from '../../components/withAuthRedirect';
 import Card from './Card';
 import { useLoggedInUser } from '../../components/context'; // Import the context hook
+import Navbar from '../../components/Navbar';
+import Footer from '../../Footer';
 
 
 
@@ -123,6 +125,7 @@ export const Home = () => {
 
   return (  
     <div>
+      <Navbar/>
       {users.length > 0 && (
         <Card key={users[currentIndex]._id} user={users[currentIndex]} />
       )}
@@ -132,6 +135,7 @@ export const Home = () => {
         <button onClick={handleRight} style={styles.button}>Next</button>
         <button onClick={handleNext} style={styles.button}>Right Swipe</button>
       </div>
+      <Footer/>
       </div>
   );
 };
@@ -142,6 +146,7 @@ const styles = {
     justifyContent: 'center',
     marginTop: '10px',
   },
+  
   button: {
     margin: '5px 5px', // Add margin to create space between buttons
   }

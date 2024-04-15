@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useLoggedInUser } from '../../components/context'; // Import the context hook
 import withAuthRedirect from '../../components/withAuthRedirect';
+import Navbar from '../../components/Navbar';
+import Footer from '../../Footer';
 
 const Match = () => {
   const { loggedInUser } = useLoggedInUser(); // Destructure loggedInUser from context
@@ -30,6 +32,7 @@ const Match = () => {
 
   return (
     <div className="match-page">
+      <Navbar/>
       <h2>People to Chat With</h2>
       <ul>
         {chattedUsers.map((user) => (
@@ -44,6 +47,7 @@ const Match = () => {
           </li>
         ))}
       </ul>
+      <Footer />
     </div>
   );
 };

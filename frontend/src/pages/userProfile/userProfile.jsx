@@ -1,6 +1,9 @@
 import React from 'react';
 import { useLoggedInUser } from '../../components/context'; // Import the context hook
 import "./userProfile.css";
+import Navbar from '../../components/Navbar';
+import Footer from '../../Footer';
+import withAuthRedirect from '../../components/withAuthRedirect';
 
 const UserProfile = () => {
   const { loggedInUser } = useLoggedInUser(); // Destructure loggedInUser from context
@@ -54,9 +57,11 @@ const UserProfile = () => {
 
   return (
     <div>
+      <Navbar/>
       {renderUserDetails()}
+      <Footer />
     </div>
   );
 };
 
-export default UserProfile;
+export default withAuthRedirect(UserProfile);
