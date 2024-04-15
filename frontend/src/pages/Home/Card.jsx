@@ -81,7 +81,7 @@ const styles = {
     width: '40%',
     margin: 'auto',
     marginTop: '20px',
-    overflow: 'hidden', // Ensure the card doesn't expand based on image size
+    overflow: 'hidden',
   },
   carousel: {
     display: 'flex',
@@ -105,3 +105,4 @@ const styles = {
 };
 
 export default Card;
+
