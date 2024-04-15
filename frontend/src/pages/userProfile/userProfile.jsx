@@ -2,6 +2,7 @@ import React from 'react';
 import { useLoggedInUser } from '../../components/context'; // Import the context hook
 import "./userProfile.css";
 
+
 const UserProfile = () => {
   const { loggedInUser } = useLoggedInUser(); // Destructure loggedInUser from context
 
@@ -47,6 +48,11 @@ const UserProfile = () => {
               return null; // Exclude the field from rendering
             })}
           </div>
+        </div>
+        <div className="animation-container">
+          <div className="circle1"></div>
+          <div className="circle2"></div>
+          <div className="circle3"></div>
         </div>
       </div>
     );

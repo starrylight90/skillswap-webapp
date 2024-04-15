@@ -8,7 +8,7 @@ import Footer from './Footer'; // Import Footer component from its file
 import MyNavbar from './MyNavbar'; // Import MyNavbar component from its file
 import Match from './pages/Matches/Match';
 import UserProfile from './pages/userProfile/userProfile';
-import About from './pages/AboutUsPage/AboutUs';
+import AboutUs from './pages/AboutUsPage/AboutUs'; // Import AboutUs component from its file
 
 const App = () => {
   return (
@@ -21,8 +21,8 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/home" element={<Home />} />
           <Route path="/match" element={<Match />} />
-          <Route path="/user" element={<UserProfile/>} />
-          <Route path="/About" element={<About/>} />
+          <Route path="/user" element={<UserProfile />} />
+          <Route path="/about-us" element={<AboutUs />} /> {/* Add this line */}
         </Routes>
         <Footer />
       </div>
@@ -31,3 +31,4 @@ const App = () => {
 };
 
 export default App;
+
