@@ -8,6 +8,7 @@ import Footer from './Footer'; // Import Footer component from its file
 import MyNavbar from './MyNavbar'; // Import MyNavbar component from its file
 import Match from './pages/Matches/Match';
 import UserProfile from './pages/userProfile/userProfile';
+import About from './pages/AboutUsPage/AboutUs';
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/match" element={<Match />} />
           <Route path="/user" element={<UserProfile/>} />
+          <Route path="/About" element={<About/>} />
         </Routes>
         <Footer />
       </div>
