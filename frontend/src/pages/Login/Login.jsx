@@ -57,51 +57,53 @@ const Login = () => {
 
 
   return (
-    <div className="login-container">
-      <div className="login-form-1">
-        <h3>LoginScreen</h3>
-        <form>
-          <div className="form-group">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Email *"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="password"
-              className="form-control"
-              placeholder="Password *"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <button
-              type="button"
-              className="btnSubmit"
-              onClick={handleLogin}
-            >
-              Login
-            </button>
-          </div>
-          <div className="form-group">
-            <a href="#" className="ForgetPwd">
-              Forget Password?
-            </a>
-          </div>
-          <div className="form-group">
-            <Link to="/profile" className="btn-lg">
-              Don't Have an Account? SignUp
-            </Link>
-          </div>
-        </form>
+    <div>
+ <div className="container login-container">
+      <div className="row">
+        <div className="col-md-6 mx-auto login-form-1">
+          <h3>Login for Form 1</h3>
+          <form>
+            <div className="form-group">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Your Email *"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="password"
+                className="form-control"
+                placeholder="Your Password *"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <button type="button" className="btnSubmit btn btn-primary btn-lg" onClick={handleLogin}>
+                Login
+              </button>
+            </div>
+            <div className="form-group">
+              <a href="#" className="ForgetPwd">
+                Forget Password?
+              </a>
+            </div>
+            <div className="form-group">
+              <Link to="/profile" className="btn-lg">
+                Make an account with us!
+              </Link>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
-  );
+
+
+    </div>
+  )
 }
 
 export default Login
